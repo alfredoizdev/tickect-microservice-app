@@ -1,6 +1,8 @@
 import { Response, Request, Router } from "express";
 import { body, validationResult } from "express-validator";
 import { RequestValidationError } from "../erros/request-validation-error";
+import User from "../model/User";
+import { BadRequestError } from "../erros/bad-request-error";
 
 const router = Router();
 
@@ -17,17 +19,25 @@ router.post(
       .notEmpty()
       .withMessage("You must supply a username"),
   ],
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
       throw new RequestValidationError(errors.array());
     }
 
     const { email, password, username } = req.body;
 
-    // creating user
+    const userExists = await User.findOne({ email });
 
-    res.send({ email, password, username });
+    if (userExists) {
+      throw new BadRequestError("Email in use");
+    }
+
+    const user = User.build({ email, password, username });
+    await user.save();
+
+    res.status(201).send(user);
   }
 );
 
