@@ -7,9 +7,12 @@ import { signoutRouter } from "./routers/signout";
 import { signupRouter } from "./routers/signup";
 import { errorsHandler } from "./middleware/error-handler";
 import { NotFoundError } from "./erros/not-found-error";
+import mongoose from "mongoose";
 
 const app = express();
 app.use(json());
+
+const mongoUri = process.env.MONGO_URI;
 
 app.use(currentUserRouter);
 app.use(signinRouter);
@@ -22,6 +25,21 @@ app.all("*", async (req, res) => {
 
 app.use(errorsHandler);
 
-app.listen(3000, () => {
-  console.log("AUTH Listening on port 3000");
-});
+const start = async () => {
+  if (!mongoUri) {
+    throw new Error("MONGO_URI must be defined");
+  }
+
+  try {
+    await mongoose.connect(`${mongoUri}/auth`);
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.error(error);
+  }
+
+  app.listen(3000, () => {
+    console.log("AUTH Listening on port 3000");
+  });
+};
+
+start();
