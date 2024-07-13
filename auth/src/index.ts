@@ -1,6 +1,8 @@
 import express from "express";
 import "express-async-errors";
 import { json } from "body-parser";
+import cookieSession from "cookie-session";
+
 import { currentUserRouter } from "./routers/current-user";
 import { signinRouter } from "./routers/signin";
 import { signoutRouter } from "./routers/signout";
@@ -10,7 +12,9 @@ import { NotFoundError } from "./erros/not-found-error";
 import mongoose from "mongoose";
 
 const app = express();
+app.set("trust proxy", true);
 app.use(json());
+app.use(cookieSession({ signed: false, secure: true }));
 
 const mongoUri = process.env.MONGO_URI;
 
@@ -26,6 +30,10 @@ app.all("*", async (req, res) => {
 app.use(errorsHandler);
 
 const start = async () => {
+  if (!process.env.JWT_KEY) {
+    throw new Error("JWT_KEY must present");
+  }
+
   if (!mongoUri) {
     throw new Error("MONGO_URI must be defined");
   }

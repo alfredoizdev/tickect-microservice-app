@@ -1,5 +1,10 @@
 import { Response, Request, Router } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
+import { BadRequestError } from "../erros/bad-request-error";
+import { validateRequest } from "../middleware/validate-request";
+import User from "../model/User";
+import { Password } from "../services/password";
+import jwt from "jsonwebtoken";
 
 const router = Router();
 
@@ -9,21 +14,42 @@ router.post(
     body("email").isEmail().withMessage("Email must be valid"),
     body("password")
       .trim()
-      .isLength({ min: 4, max: 20 })
-      .withMessage("Password must be between 4 and 20 characters"),
+      .notEmpty()
+      .withMessage("You must supply a password"),
   ],
-  (req: Request, res: Response) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return res.status(400).send(errors.array());
-    }
-
+  validateRequest,
+  async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    // validate user
+    const existingUser = await User.findOne({ email });
 
-    res.send({ email, password });
+    if (!existingUser) {
+      throw new BadRequestError("Invalid credentials");
+    }
+
+    const passwordMatch = await Password.compare(
+      existingUser.password,
+      password
+    );
+
+    if (!passwordMatch) {
+      throw new BadRequestError("Invalid credentials");
+    }
+
+    const userJwt = jwt.sign(
+      {
+        id: existingUser.id,
+        email: existingUser.email,
+        username: existingUser.username,
+      },
+      process.env.JWT_KEY!
+    );
+
+    req.session = {
+      jwt: userJwt,
+    };
+
+    res.status(200).send(existingUser);
   }
 );
 
