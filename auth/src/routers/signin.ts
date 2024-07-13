@@ -49,8 +49,6 @@ router.post(
       jwt: userJwt,
     };
 
-    console.log("User signed in", req.session);
-
     res.status(200).send(existingUser);
   }
 );

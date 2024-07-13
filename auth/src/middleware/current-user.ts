@@ -19,7 +19,6 @@ export const currentUser = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("currentUser middleware", req.session);
   if (!req.session?.jwt) {
     return next();
   }
