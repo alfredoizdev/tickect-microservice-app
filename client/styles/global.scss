@@ -1,0 +1,39 @@
+@import "_reset.scss";
+
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+$primary: #ff5733;
+$secondary: #33cfff;
+$btn-primary-bg: $primary;
+$btn-primary-border: $primary;
+
+@import "~bootstrap/scss/bootstrap";
+
+// Add custom styles
+.btn-primary {
+    @extend .btn;
+    background-color: $secondary;
+    border-color: $secondary;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  
+    &:hover {
+      background-color: darken($secondary, 10%);
+      border-color: darken($secondary, 10%);
+    }
+  }
+
+  .btn-danger {
+    @extend .btn;
+    background-color: $primary;
+    border-color: $primary;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  
+    &:hover {
+      background-color: darken($primary, 10%);
+      border-color: darken($primary, 10%);
+    }
+  }
