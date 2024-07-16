@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import { app } from "./app";
 
 const start = async () => {
+  console.log("Starting up...", process.env.MONGO_URI);
+
   if (!process.env.MONGO_URI) {
     throw new Error("MONGO_URI must present");
   }

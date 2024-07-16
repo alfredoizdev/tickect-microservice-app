@@ -14,6 +14,14 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
+    - image: alfredoizjr/client
+      context: client
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        manual:
+          - src: "**/*.tsx"
+            dest: .
 manifests:
   rawYaml:
-    - k8s/*
+    - k8s/dev/*
