@@ -8,6 +8,7 @@ export function middleware(request: NextRequest) {
   if (!storeCookie) {
     return NextResponse.redirect(new URL("/auth/signin", request.url));
   }
+
   return NextResponse.next();
 }
 

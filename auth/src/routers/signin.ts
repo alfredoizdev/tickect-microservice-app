@@ -1,7 +1,9 @@
 import { Response, Request, Router } from "express";
 import { body } from "express-validator";
-import { BadRequestError } from "../erros/bad-request-error";
-import { validateRequest } from "../middleware/validate-request";
+import {
+  BadRequestError,
+  validateRequest,
+} from "@alfticket-app/middleware-app";
 import User from "../model/User";
 import { Password } from "../services/password";
 import jwt from "jsonwebtoken";

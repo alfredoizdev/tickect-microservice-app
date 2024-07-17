@@ -1,11 +1,11 @@
 import LayoutApp from "@/components/shared/LayoutApp/LayoutApp";
 
-const HomePage = async () => {
+const AboutPage = () => {
   return (
     <LayoutApp>
-      <h2>ticket page</h2>
+      <h2>about page</h2>
     </LayoutApp>
   );
 };
 
-export default HomePage;
+export default AboutPage;

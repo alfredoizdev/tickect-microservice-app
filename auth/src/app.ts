@@ -7,8 +7,8 @@ import { currentUserRouter } from "./routers/current-user";
 import { signinRouter } from "./routers/signin";
 import { signoutRouter } from "./routers/signout";
 import { signupRouter } from "./routers/signup";
-import { errorsHandler } from "./middleware/error-handler";
-import { NotFoundError } from "./erros/not-found-error";
+import { errorsHandler } from "@alfticket-app/middleware-app";
+import { NotFoundError } from "@alfticket-app/middleware-app";
 
 const app = express();
 app.set("trust proxy", true);
