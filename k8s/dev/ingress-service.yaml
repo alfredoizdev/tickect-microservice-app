@@ -21,7 +21,7 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: auth-service
+                name: tickets-service
                 port:
                   number: 3000
           - path: /?(.*)

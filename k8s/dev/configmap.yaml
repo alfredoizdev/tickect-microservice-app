@@ -4,3 +4,4 @@ metadata:
   name: auth-config
 data:
   MONGO_PATH: mongodb://auth-mongo-service:27017
+  RABBITMQ_PATH: "amqp://rabbitmq-service.svc.cluster.local"

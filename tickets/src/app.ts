@@ -9,6 +9,9 @@ import {
   NotFoundError,
 } from "@alfticket-app/middleware-app";
 import { newTicketRouter } from "./routers/new";
+import { showTicketRouter } from "./routers/show";
+import { indexTicketRouter } from "./routers/index";
+import { updateTicketRouter } from "./routers/update";
 
 const app = express();
 app.set("trust proxy", true);
@@ -20,6 +23,9 @@ app.use(
 app.use(currentUser);
 
 app.use(newTicketRouter);
+app.use(showTicketRouter);
+app.use(indexTicketRouter);
+app.use(updateTicketRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();

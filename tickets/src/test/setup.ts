@@ -39,7 +39,7 @@ global.getCookieSignup = () => {
 
   // build jwt token {id email}
   const payload = {
-    id: "1234",
+    id: new mongoose.Types.ObjectId().toHexString(),
     email,
     username,
   };
