@@ -2,6 +2,8 @@ import { Router, Request, Response } from "express";
 import { requireAuth, validateRequest } from "@alfticket-app/middleware-app";
 import { body } from "express-validator";
 import Ticket from "../models/Ticket";
+import { TicketCreatedSender } from "../events/publisher/ticket-create-publisher";
+import amqplib from "amqplib";
 
 const router = Router();
 
@@ -25,6 +27,27 @@ router.post(
     });
 
     await ticket.save();
+
+    const connection = await amqplib.connect("amqp://rabbitmq-service");
+
+    const sender = new TicketCreatedSender();
+
+    try {
+      await sender.setConnection(connection);
+
+      if (!sender.checkConnection()) {
+        throw new Error("Failed to set connection and channel for sender");
+      }
+
+      sender.send({
+        id: ticket.id,
+        title: ticket.title,
+        price: ticket.price,
+        userId: ticket.userId,
+      });
+    } catch (error) {
+      console.error("Failed to send message", error);
+    }
 
     res.status(201).send(ticket);
   }

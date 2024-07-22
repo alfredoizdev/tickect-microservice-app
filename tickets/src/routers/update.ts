@@ -8,6 +8,8 @@ import {
 } from "@alfticket-app/middleware-app";
 import { body } from "express-validator";
 import Ticket from "../models/Ticket";
+import { TicketUpdatedPublisher } from "../events/publisher/ticker-updated-publisher";
+import amqplib from "amqplib";
 
 const router = Router();
 
@@ -41,6 +43,27 @@ router.put(
     });
 
     ticket.save();
+
+    const sender = new TicketUpdatedPublisher();
+
+    const connection = await amqplib.connect("amqp://rabbitmq-service");
+
+    try {
+      await sender.setConnection(connection);
+
+      if (!sender.checkConnection()) {
+        throw new Error("Failed to set connection and channel for sender");
+      }
+
+      sender.send({
+        id: ticket.id,
+        title: ticket.title,
+        price: ticket.price,
+        userId: ticket.userId,
+      });
+    } catch (error) {
+      console.error("Failed to send message", error);
+    }
 
     res.status(200).send(ticket);
   }
