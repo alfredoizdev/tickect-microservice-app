@@ -1,4 +1,5 @@
 import { Schema, Document, model, Model } from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 export interface ITicket {
   userId: string;
@@ -14,8 +15,7 @@ interface ITicketDoc extends Document, ITicket {
   userId: string;
   title: string;
   price: number;
-  createdAt?: string;
-  updatedAt?: string;
+  version: number;
 }
 
 export const ticketSchema = new Schema(
@@ -49,6 +49,9 @@ ticketSchema.set("toJSON", {
     delete ret.__v;
   },
 });
+
+ticketSchema.set("versionKey", "version");
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 const Ticket = model<ITicketDoc, ITicketModel>("Ticket", ticketSchema);
 

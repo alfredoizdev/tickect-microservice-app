@@ -39,11 +39,12 @@ router.post(
         throw new Error("Failed to set connection and channel for sender");
       }
 
-      sender.send({
+      await sender.send({
         id: ticket.id,
         title: ticket.title,
         price: ticket.price,
         userId: ticket.userId,
+        version: ticket.version,
       });
     } catch (error) {
       console.error("Failed to send message", error);

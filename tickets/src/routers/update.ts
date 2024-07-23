@@ -60,6 +60,7 @@ router.put(
         title: ticket.title,
         price: ticket.price,
         userId: ticket.userId,
+        version: ticket.version,
       });
     } catch (error) {
       console.error("Failed to send message", error);

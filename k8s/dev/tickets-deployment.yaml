@@ -21,10 +21,7 @@ spec:
             - containerPort: 3000
           env:
             - name: MONGO_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: auth-config
-                  key: MONGO_PATH
+              value: mongodb://tickets-mongo-service:27017
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:

@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-deployment
+  name: orders-deployment
   labels:
-    app: auth
+    app: orders
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: orders
   template:
     metadata:
       labels:
-        app: auth
+        app: orders
     spec:
       containers:
-        - name: auth
-          image: alfredoizjr/auth:latest
+        - name: orders
+          image: alfredoizjr/orders:latest
           ports:
             - containerPort: 3000
           env:
             - name: MONGO_URI
-              value: mongodb://auth-mongo-service:27017
+              value: mongodb://orders-mongo-service:27017
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
@@ -32,12 +32,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-service
+  name: orders-service
 spec:
   selector:
-    app: auth
+    app: orders
   ports:
-    - name: auth
+    - name: orders
       protocol: TCP
       port: 3000
       targetPort: 3000

@@ -1,5 +1,4 @@
-import { Subjects, TicketCreateEvent } from "../../lib/Events";
-import { AbstractSender } from "@alfrmq/rmq-app";
+import { AbstractSender, Subjects, TicketCreateEvent } from "@alfrmq/rmq-app";
 
 export class TicketCreatedSender extends AbstractSender<
   TicketCreateEvent["data"]
