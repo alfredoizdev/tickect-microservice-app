@@ -27,6 +27,7 @@ it("returns an error if an invalid title is provided", async () => {
     .send({
       title: "",
       price: 10,
+      version: 1,
     });
 
   expect(response.status).toEqual(400);
@@ -39,6 +40,7 @@ it("returns an error if an invalid price is provided", async () => {
     .send({
       title: "test",
       price: -10,
+      version: 1,
     });
 
   expect(response.status).toEqual(400);
@@ -57,6 +59,7 @@ it("creates a ticket with valid inputs", async () => {
     .send({
       title,
       price,
+      version: 1,
     })
     .expect(201);
 

@@ -8,6 +8,7 @@ const createTicket = () => {
     .send({
       title: "test",
       price: 20,
+      version: 1,
     });
 };
 

@@ -8,7 +8,7 @@ import {
 } from "@alfticket-app/middleware-app";
 import { body } from "express-validator";
 import Ticket from "../models/Ticket";
-import { TicketUpdatedPublisher } from "../events/publisher/ticker-updated-publisher";
+import { TicketUpdatedPublisher } from "../events/publisher/ticket-updated-publisher";
 import amqplib from "amqplib";
 
 const router = Router();

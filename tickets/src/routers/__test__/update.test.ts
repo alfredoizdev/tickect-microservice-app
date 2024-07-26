@@ -1,6 +1,6 @@
 import request from "supertest";
 import { app } from "../../app";
-import mongoose from "mongoose";
+import mongoose, { version } from "mongoose";
 
 it("return 404 if provider id is no exist", async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
@@ -10,6 +10,7 @@ it("return 404 if provider id is no exist", async () => {
     .send({
       title: "test",
       price: 20,
+      version: 1,
     });
 
   expect(response.status).toEqual(404);
@@ -20,6 +21,7 @@ it("return 401 if user is not authenticated", async () => {
   const response = await request(app).put(`/api/tickets/${id}`).send({
     title: "test",
     price: 20,
+    version: 1,
   });
 
   expect(response.status).toEqual(401);
@@ -32,6 +34,7 @@ it("return 401 if user does not own the ticket", async () => {
     .send({
       title: "test",
       price: 20,
+      version: 1,
     })
     .expect(201);
 
@@ -53,6 +56,7 @@ it("return 400 if user provide invalid title or price", async () => {
     .send({
       title: "test",
       price: 20,
+      version: 1,
     })
     .expect(201);
 
@@ -62,6 +66,7 @@ it("return 400 if user provide invalid title or price", async () => {
     .send({
       title: "",
       price: 20,
+      version: 1,
     })
     .expect(400);
 
@@ -71,6 +76,7 @@ it("return 400 if user provide invalid title or price", async () => {
     .send({
       title: "test",
       price: -20,
+      version: 1,
     })
     .expect(400);
 });
@@ -83,6 +89,7 @@ it("update ticket is user provider valid inputs", async () => {
     .send({
       title: "test",
       price: 20,
+      version: 1,
     })
     .expect(201);
 
@@ -94,6 +101,7 @@ it("update ticket is user provider valid inputs", async () => {
     .send({
       title: newTitle,
       price: 20,
+      version: 1,
     })
     .expect(200);
 

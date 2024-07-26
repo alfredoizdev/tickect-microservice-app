@@ -14,10 +14,7 @@ export class TicketUpdatedListener extends AbstractListener<TicketUpdatedEvent> 
   async handleMessage(message: string): Promise<void> {
     const data = JSON.parse(message).data as TicketUpdatedEvent["data"];
 
-    const ticket = await Ticket.findOne({
-      _id: data.id,
-      version: data.version - 1,
-    });
+    const ticket = await Ticket.findByEvent(data);
 
     if (!ticket) {
       throw new NotFoundError();

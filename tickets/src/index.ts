@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import { app } from "./app";
+import { OrderCreateListener } from "./events/listeners/order-create-listener";
+import amqplib from "amqplib";
 
 const start = async () => {
   console.log("Starting up...", process.env.MONGO_URI);
@@ -18,6 +20,17 @@ const start = async () => {
   } catch (error) {
     console.error(error);
   }
+
+  const connection = await amqplib.connect("amqp://rabbitmq-service");
+
+  const orderCreateListener = new OrderCreateListener();
+  await orderCreateListener.setConnection(connection);
+
+  if (!connection) {
+    throw new Error("Failed to connect to RabbitMQ");
+  }
+
+  console.log("Connected to RabbitMQ");
 
   app.listen(3000, () => {
     console.log("AUTH Listening on port 3000");

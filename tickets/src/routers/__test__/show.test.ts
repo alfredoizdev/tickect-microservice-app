@@ -26,6 +26,7 @@ it("returns a ticket if the ticket is found", async () => {
     .send({
       title,
       price,
+      version: 1,
     })
     .expect(201);
 

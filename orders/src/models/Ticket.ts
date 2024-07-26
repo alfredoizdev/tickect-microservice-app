@@ -19,6 +19,10 @@ export interface TicketDoc extends Document {
 
 interface TicketModel extends Model<TicketDoc> {
   build(attrs: TicketAttrs): TicketDoc;
+  findByEvent(event: {
+    id: string;
+    version: number;
+  }): Promise<TicketDoc | null>;
 }
 
 const ticketSchema = new Schema({
@@ -36,6 +40,20 @@ const ticketSchema = new Schema({
 ticketSchema.set("versionKey", "version");
 ticketSchema.plugin(updateIfCurrentPlugin);
 
+// ticketSchema.pre("save", function (done) {
+//   // @ts-ignore
+//   this.$where = {
+//     version: this.get("version") - 1,
+//   };
+//   done();
+// });
+
+ticketSchema.statics.findByEvent = (event: { id: string; version: number }) => {
+  return Ticket.findOne({
+    _id: event.id,
+    version: event.version - 1,
+  });
+};
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
   return new Ticket({
     _id: attrs.id,
